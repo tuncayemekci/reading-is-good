@@ -1,12 +1,17 @@
 package com.getir.readingisgood.entity;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
+
+import java.util.List;
 
 @Data
 @Document
+@NoArgsConstructor
 public class Customer {
 
     @Id
@@ -20,6 +25,9 @@ public class Customer {
     private String email;
 
     private String password;
+
+    @DBRef
+    private List<Order> orders;
 
     public Customer(String firstName, String lastName, String email, String password) {
         this.firstName = firstName;
