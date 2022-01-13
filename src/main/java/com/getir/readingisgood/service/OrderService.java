@@ -3,6 +3,7 @@ package com.getir.readingisgood.service;
 import com.getir.readingisgood.entity.Book;
 import com.getir.readingisgood.entity.Customer;
 import com.getir.readingisgood.entity.Order;
+import com.getir.readingisgood.exception.ApiRequestException;
 import com.getir.readingisgood.model.OrderDetail;
 import com.getir.readingisgood.model.OrderStatus;
 import com.getir.readingisgood.model.dto.OrderDTO;
@@ -42,7 +43,7 @@ public class OrderService {
     public ResponseEntity<?> addOrder(OrderDTO orderDTO) {
         Optional<Customer> customer = customerRepository.findCustomerByEmail(orderDTO.getEmail());
         if (!customer.isPresent()) {
-            return new ResponseEntity<>("The customer doesn't exists with email: " + orderDTO.getEmail(), new HttpHeaders(), HttpStatus.BAD_REQUEST);
+            throw new ApiRequestException("The customer doesn't exists with email: " + orderDTO.getEmail());
         }
 
         Order order = new Order();
@@ -53,17 +54,17 @@ public class OrderService {
 
             Optional<Book> optionalBook = bookRepository.findBookByName(orderDetailDTO.getBookName());
             if (!optionalBook.isPresent()) {
-                return new ResponseEntity<>("The book doesn't exists with name: " + orderDetailDTO.getBookName(), new HttpHeaders(), HttpStatus.BAD_REQUEST);
+                throw new ApiRequestException("The book doesn't exists with name: " + orderDetailDTO.getBookName());
             }
 
             Book book = optionalBook.get();
             if (book.getStock() < 1) {
-                return new ResponseEntity<>("The book is out of stock with name: " + orderDetailDTO.getBookName(), new HttpHeaders(), HttpStatus.BAD_REQUEST);
+                throw new ApiRequestException("The book doesn't exists with name: " + orderDetailDTO.getBookName());
             }
 
             Integer requestedQuantity = orderDetailDTO.getQuantity();
             if (requestedQuantity > book.getStock()) {
-                return new ResponseEntity<>("Requested quantity is more than existing stock: " + orderDetailDTO.getBookName() + " - Current stock is " + book.getStock(), new HttpHeaders(), HttpStatus.BAD_REQUEST);
+                throw new ApiRequestException("Requested quantity is more than existing stock: " + orderDetailDTO.getBookName() + " - Current stock is " + book.getStock());
             }
 
             orderDetails.add(new OrderDetail(book, requestedQuantity, book.getPrice()));

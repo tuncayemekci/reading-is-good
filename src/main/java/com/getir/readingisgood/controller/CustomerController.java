@@ -1,6 +1,7 @@
 package com.getir.readingisgood.controller;
 
 import com.getir.readingisgood.entity.Customer;
+import com.getir.readingisgood.exception.ApiRequestException;
 import com.getir.readingisgood.model.dto.CustomerDTO;
 import com.getir.readingisgood.service.CustomerService;
 import lombok.AllArgsConstructor;
@@ -26,7 +27,8 @@ public class CustomerController {
 
     @PostMapping("/add")
     public ResponseEntity<?> addCustomer(@Valid @RequestBody CustomerDTO customerDTO) {
-        return customerService.addCustomer(customerDTO);
+        throw new ApiRequestException("Hata asdasd");
+        //return customerService.addCustomer(customerDTO);
     }
 
 }

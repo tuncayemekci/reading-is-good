@@ -1,6 +1,7 @@
 package com.getir.readingisgood.service;
 
 import com.getir.readingisgood.entity.Book;
+import com.getir.readingisgood.exception.ApiRequestException;
 import com.getir.readingisgood.model.dto.BookDTO;
 import com.getir.readingisgood.model.dto.BookStockDTO;
 import com.getir.readingisgood.repository.BookRepository;
@@ -28,7 +29,7 @@ public class BookService {
     @Transactional
     public ResponseEntity<?> addBook(BookDTO bookDTO) {
         if (bookRepository.existsByName(bookDTO.getName())) {
-            return new ResponseEntity<>("The book already exists with name: " + bookDTO.getName(), new HttpHeaders(), HttpStatus.BAD_REQUEST);
+            throw new ApiRequestException("The book already exists with name: " + bookDTO.getName());
         }
 
         Book book = BookUtil.dtoToBook(bookDTO);
@@ -41,14 +42,14 @@ public class BookService {
         Optional<Book> optionalBook = bookRepository.findBookByName(bookStockDTO.getName());
 
         if (!optionalBook.isPresent()) {
-            return new ResponseEntity<>("The book that you try to update doesn't exist with name: " + bookStockDTO.getName(), new HttpHeaders(), HttpStatus.BAD_REQUEST);
+            throw new ApiRequestException("The book that you try to update doesn't exist with name: " + bookStockDTO.getName());
         }
 
         Book book = optionalBook.get();
         Integer newQuantity = book.getStock() + bookStockDTO.getQuantity();
 
         if (newQuantity < 0) {
-            return new ResponseEntity<>("The Book's stock can not be less than zero when you try to update: " + bookStockDTO.getName(), new HttpHeaders(), HttpStatus.BAD_REQUEST);
+            throw new ApiRequestException("The Book's stock can not be less than zero when you try to update: " + bookStockDTO.getName());
         }
 
         book.setStock(newQuantity);

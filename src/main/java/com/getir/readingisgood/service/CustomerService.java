@@ -1,6 +1,7 @@
 package com.getir.readingisgood.service;
 
 import com.getir.readingisgood.entity.Customer;
+import com.getir.readingisgood.exception.ApiRequestException;
 import com.getir.readingisgood.model.dto.CustomerDTO;
 import com.getir.readingisgood.repository.CustomerRepository;
 import com.getir.readingisgood.util.CustomerUtil;
@@ -24,7 +25,7 @@ public class CustomerService {
 
     public ResponseEntity<?> addCustomer(CustomerDTO customerDTO) {
         if (customerRepository.existsByEmail(customerDTO.getEmail())) {
-            return new ResponseEntity<>("The customer is already exists with email: " + customerDTO.getEmail(), new HttpHeaders(), HttpStatus.BAD_REQUEST);
+            throw new ApiRequestException("The customer is already exists with email: " + customerDTO.getEmail());
         }
 
         Customer customer = CustomerUtil.dtoToCustomer(customerDTO);
