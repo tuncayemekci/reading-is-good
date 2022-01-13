@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 public class ApiException {
 
     private final LocalDateTime timestamp;
-    private final int statusCode;
+    private final int status;
     private final String error;
     private final String message;
 

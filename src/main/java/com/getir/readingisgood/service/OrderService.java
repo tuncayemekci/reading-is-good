@@ -6,20 +6,21 @@ import com.getir.readingisgood.entity.Order;
 import com.getir.readingisgood.exception.ApiRequestException;
 import com.getir.readingisgood.model.OrderDetail;
 import com.getir.readingisgood.model.OrderStatus;
+import com.getir.readingisgood.model.Response;
 import com.getir.readingisgood.model.dto.OrderDTO;
 import com.getir.readingisgood.model.dto.OrderDetailDTO;
 import com.getir.readingisgood.repository.BookRepository;
 import com.getir.readingisgood.repository.CustomerRepository;
 import com.getir.readingisgood.repository.OrderRepository;
 import lombok.AllArgsConstructor;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -35,8 +36,9 @@ public class OrderService {
         return orderRepository.findAll();
     }
 
-    public List<Order> getAllOrdersById(String id) {
-        return orderRepository.findAllById(id);
+    public ResponseEntity<?> getOrderById(String id) {
+        List<Order> orders = orderRepository.findAllById(id);
+        return Response.OK(orders);
     }
 
     @Transactional
@@ -79,8 +81,19 @@ public class OrderService {
         order.setDetails(orderDetails);
         order.setTotalPrice(totalPrice);
         Order newOrder = orderRepository.save(order);
-        return new ResponseEntity<>("The order has been created successfully: " + newOrder.getId(), new HttpHeaders(), HttpStatus.CREATED);
+
+        return Response.CREATED("The order has been created successfully: " + newOrder.getId());
     }
 
 
+    public ResponseEntity getOrdersByDateInterval(Date startDate, Date endDate) {
+        if (startDate.after(endDate)) {
+            throw new ApiRequestException("The end date must be after than the end date");
+        }
+
+        LocalDateTime start = LocalDateTime.ofInstant(startDate.toInstant(), ZoneId.systemDefault());
+        LocalDateTime end = LocalDateTime.ofInstant(endDate.toInstant(), ZoneId.systemDefault());
+        List<Order> orders = orderRepository.findAllByDateIsBetween(start, end);
+        return Response.OK(orders);
+    }
 }

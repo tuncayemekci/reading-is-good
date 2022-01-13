@@ -8,9 +8,9 @@ public class CustomerUtil {
     public static Customer dtoToCustomer(CustomerDTO customerDTO) {
         Customer customer = new Customer();
         customer.setFirstName(customerDTO.getFirstName());
-        customer.setLastName(customerDTO.getFirstName());
+        customer.setLastName(customerDTO.getLastName());
         customer.setEmail(customerDTO.getEmail());
-        customer.setPassword(customerDTO.getEmail());
+        customer.setPassword(customerDTO.getPassword());
         return customer;
     }
 }

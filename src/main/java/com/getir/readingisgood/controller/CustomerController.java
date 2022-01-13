@@ -1,20 +1,19 @@
 package com.getir.readingisgood.controller;
 
 import com.getir.readingisgood.entity.Customer;
-import com.getir.readingisgood.exception.ApiRequestException;
 import com.getir.readingisgood.model.dto.CustomerDTO;
 import com.getir.readingisgood.service.CustomerService;
 import lombok.AllArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 
 import javax.validation.Valid;
+import javax.validation.constraints.Min;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/customers")
+@RequestMapping("/api/v1/customer")
 @AllArgsConstructor
 public class CustomerController {
 
@@ -27,8 +26,14 @@ public class CustomerController {
 
     @PostMapping("/add")
     public ResponseEntity<?> addCustomer(@Valid @RequestBody CustomerDTO customerDTO) {
-        throw new ApiRequestException("Hata asdasd");
-        //return customerService.addCustomer(customerDTO);
+        return customerService.addCustomer(customerDTO);
+    }
+
+    @GetMapping("/{id}/orders")
+    public ResponseEntity<?> getOrdersOfCustomerByPagination(@PathVariable String id,
+                                                             @Min(1) @RequestParam(defaultValue = "1") Integer page,
+                                                             @Min(1) @RequestParam(defaultValue = "1") Integer size) {
+        return customerService.getOrdersOfCustomerByPagination(id, page, size);
     }
 
 }
