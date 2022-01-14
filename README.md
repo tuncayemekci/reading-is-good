@@ -1,6 +1,6 @@
 # Reading Is Good
 
-'Reading is good' is a spring boot rest app that allows you the following operations for the book tracking.
+'Reading is good' is a spring boot rest app that allows you to perform the following operations for the book tracking.
 
 • Registering New Customer
 
@@ -29,6 +29,12 @@ Then open up the terminal and cd into root directory of the project
 
 ```bash 
   cd reading-is-good
+```
+
+Then use the maven command to build the jar file
+
+```bash 
+  mvn clean install
 ```
 
 After that run the docker command below
