@@ -108,7 +108,7 @@ Finally app should runs at localhost:8080 and you can access the mongo-express a
 
 #### addOrder
 ```http
-  POST /api/v1/order/all
+  POST /api/v1/order/add
 ```
     {
         "email": "tuncayemekci@gmail.com",
