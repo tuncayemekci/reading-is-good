@@ -2,6 +2,7 @@ package com.getir.readingisgood.service;
 
 import com.getir.readingisgood.entity.Book;
 import com.getir.readingisgood.exception.ApiRequestException;
+import com.getir.readingisgood.model.Response;
 import com.getir.readingisgood.model.dto.BookDTO;
 import com.getir.readingisgood.model.dto.BookStockDTO;
 import com.getir.readingisgood.repository.BookRepository;
@@ -34,7 +35,7 @@ public class BookService {
 
         Book book = BookUtil.dtoToBook(bookDTO);
         bookRepository.save(book);
-        return new ResponseEntity<>("The book has been added successfully with name: " + bookDTO.getName(), new HttpHeaders(), HttpStatus.CREATED);
+        return Response.CREATED("The book has been added successfully with name: " + bookDTO.getName());
     }
 
     @Transactional
@@ -54,6 +55,6 @@ public class BookService {
 
         book.setStock(newQuantity);
         bookRepository.save(book);
-        return new ResponseEntity<>("The book has been updated successfully with name: " + bookStockDTO.getName(), new HttpHeaders(), HttpStatus.OK);
+        return Response.OK("The book has been updated successfully with name: " + bookStockDTO.getName());
     }
 }
