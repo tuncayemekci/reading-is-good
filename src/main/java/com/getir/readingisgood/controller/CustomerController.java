@@ -31,8 +31,8 @@ public class CustomerController {
 
     @GetMapping("/{id}/orders")
     public ResponseEntity<?> getOrdersOfCustomerByPagination(@PathVariable String id,
-                                                             @Min(1) @RequestParam(defaultValue = "1") Integer page,
-                                                             @Min(1) @RequestParam(defaultValue = "1") Integer size) {
+                                                             @Min(0) @RequestParam Integer page,
+                                                             @Min(0) @RequestParam Integer size) {
         return customerService.getOrdersOfCustomerByPagination(id, page, size);
     }
 
